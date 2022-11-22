@@ -22,7 +22,19 @@ Given('a person named {word} is located at {int}', function (name, location) {
   this.people[name] = new Person(this.network, location)
 })
 
+// Data Tables - simple implementation is 2D array
+// Table can be turned into an Arr[Objects] with 'dataTables.hashes()'
+Given('people are located at', function (dataTable) {
+	dataTable.hashes().map((person) => {
+		this.people[person.name] = new Person(this.network, person.location)
+	})
+	// console.log('state of this people after mapping thru dataTable: ', this.people)
+});
+
+
 When('Sean shouts', function () {
+  // console.log('Sean shouts called()')
+  // console.log('state of this.people: ', this.people)
   this.people['Sean'].shout('Hello, world')
 })
 
