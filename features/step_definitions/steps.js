@@ -11,17 +11,14 @@ Before(function() {
 	console.log('people: ', this.people)
 })
 
-Given('a person named Lucy', function () {
-	this.people['Lucy'] = new Person(this.network)
+// create person in a generic stepdef
+Given('a person named {word}', function (name) {
+	this.people[name] = new Person(this.network)
 	console.log('given a person named lucy we now have: ', this.people)
 });
 
-Given('a person named Sean', function () {
-  this.sean = new Person(this.network)
-})
-
 When('Sean shouts {string}', function (message) {
-  this.sean.shout(message)
+  this.people['Sean'].shout(message)
   this.messageFromSean = message
 })
 
