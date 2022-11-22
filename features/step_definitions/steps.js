@@ -18,10 +18,6 @@ Given('a person named {word}', function (name) {
   this.people[name] = new Person(this.network, 0)
 })
 
-Given('a person named {word} is located at {int}', function (name, location) {
-  this.people[name] = new Person(this.network, location)
-})
-
 // Data Tables - simple implementation is 2D array
 // Table can be turned into an Arr[Objects] with 'dataTables.hashes()'
 Given('people are located at', function (dataTable) {
@@ -55,8 +51,9 @@ Then('Larry should not hear Sean\'s message', function () {
   assertThat(this.people['Larry'].messagesHeard(), not(contains(this.messageFromSean)))
 })
 
-Then('Larry should not hear a shout', function () {
-  assertThat(this.people['Larry'].messagesHeard().length, is(0))
+// parametrize your step definitions to keep it DRY
+Then('{word} should not hear a shout', function (name) {
+  assertThat(this.people[name].messagesHeard().length, is(0))
 })
 
 Then('Lucy hears the following messages:', function (expectedMessages) {
