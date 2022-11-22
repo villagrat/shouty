@@ -1,23 +1,27 @@
-const MAXIMUM_HEARING_DISTANCE = 80
-
 class Person {
-	distance = 0
-	heard = []
+	constructor(network){
+		this.messages = []
+		this.network = network
+	
+		this.network.subscribe(this)
+	}
+	
 	moveTo(distance) {
 		this.distance += distance
 	}
 	shout(message) {
-		this.heard.push(message)
-		console.log('some Person shouted: ', message)
+		this.network.broadcast(message)
 	}
 	hear(message) {
-		this.heard.push(message)
-		console.log('some Person heard: ', message)
+		this.messages.push(message)
 	}
 	messagesHeard() {
-		console.log('messages heard for Person: ', this.heard[0])
-		return this.heard
+		return this.messages
 	}
 }
 
-module.exports = Person
+class Network {
+
+}
+
+module.exports = {Person, Network}
