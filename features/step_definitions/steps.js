@@ -1,22 +1,23 @@
-const { Given, When, Then } = require('@cucumber/cucumber')
+const { Given, When, Then, Before } = require('@cucumber/cucumber')
 const { assertThat, is } = require('hamjest')
 
 const { Person, Network } = require('../../src/shouty')
 
-Given('a person named Lucy', function (person) {
-	this.lucy = new Person(this.network)
+Before(function() {
+	this.network = new Network()
+	this.people = {}
+	console.log('Before called and now we have: ')
+	console.log('network: ', this.network)
+	console.log('people: ', this.people)
+})
+
+Given('a person named Lucy', function () {
+	this.people['Lucy'] = new Person(this.network)
+	console.log('given a person named lucy we now have: ', this.people)
 });
 
-Given('a person named Sean', function (person) {
-	this.sean = new Person(this.network)
-});
-
-Given('Lucy is {int} metres from Sean', function (distance) {
-  this.network = new Network()
-  this.lucy    = new Person(this.network)
-  this.sean    = new Person(this.network)
-
-  this.lucy.moveTo(distance)
+Given('a person named Sean', function () {
+  this.sean = new Person(this.network)
 })
 
 When('Sean shouts {string}', function (message) {
@@ -25,5 +26,5 @@ When('Sean shouts {string}', function (message) {
 })
 
 Then('Lucy should hear Sean\'s message', function () {
-  assertThat(this.lucy.messagesHeard(), is([this.messageFromSean]))
+  assertThat(this.people['Lucy'].messagesHeard(), is([this.messageFromSean]))
 })
