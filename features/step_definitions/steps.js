@@ -1,6 +1,6 @@
 const { Given, When, Then, Before } = require('@cucumber/cucumber')
 const { assertThat, contains, is, not } = require('hamjest')
-
+const assert = require('node:assert');
 const { Person, Network } = require('../../src/shouty')
 
 const default_range = 100
@@ -25,7 +25,7 @@ Given('a person named {word} is located at {int}', function (name, location) {
 // Data Tables - simple implementation is 2D array
 // Table can be turned into an Arr[Objects] with 'dataTables.hashes()'
 Given('people are located at', function (dataTable) {
-	dataTable.hashes().map((person) => {
+	dataTable.transpose().hashes().map((person) => {
 		this.people[person.name] = new Person(this.network, person.location)
 	})
 	// console.log('state of this people after mapping thru dataTable: ', this.people)
@@ -58,3 +58,9 @@ Then('Larry should not hear Sean\'s message', function () {
 Then('Larry should not hear a shout', function () {
   assertThat(this.people['Larry'].messagesHeard().length, is(0))
 })
+
+Then('Lucy hears the following messages:', function (expectedMessages) {
+	let actualMessages = this.people['Lucy'].messagesHeard().map((message) => [message])
+	
+	assert.deepEqual(actualMessages, expectedMessages.raw())
+});
